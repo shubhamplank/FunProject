@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-class Data extends Component {
+class FetchData extends Component {
   constructor(prpos) {
     super(prpos);
     this.state = {
@@ -23,4 +23,4 @@ class Data extends Component {
   }
 }
 
-export default Data;
+export default FetchData;

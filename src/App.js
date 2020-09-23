@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
 import Layout from "./Component/Layout";
-import Data from './Component/axios';
+import FetchData from './Component/FetchData';
 
 
 function App() {
   return (
     <div className="App">
       <Layout />
-      <Data />
+      <FetchData />
     </div>
   );
 }
