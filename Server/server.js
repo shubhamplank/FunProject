@@ -14,7 +14,8 @@ app.use(express.static(path.join(__dirname, "..", "build")));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.send("Hello World! ok");
+  // res.send("hello world");
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
 
   // If modifying these scopes, delete token.json.
   const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
