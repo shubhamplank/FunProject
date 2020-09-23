@@ -8,7 +8,7 @@ app.get('/api/customers', (req, res) => {
     {id:3, name: "kardam"}
   ];
 
-  req.json(cunstomers);
+  res.json(cunstomers);
 });
 
 const port = 5000;
