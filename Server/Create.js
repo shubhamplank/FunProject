@@ -1,19 +1,46 @@
-const express = require("express");
-const app = express();
+const {google} = require('googleapis');
+const sheets = google.sheets('v4');
 
-const fs = require("fs");
-const readline = require("readline");
-const { google } = require("googleapis");
+async function main () {
+  const authClient = await authorize();
+  const request = {
+    // The ID of the spreadsheet to update.
+    spreadsheetId: 'my-spreadsheet-id',  // TODO: Update placeholder value.
 
-// add middlewares
-const path = require("path");
-app.use(express.static(path.join(__dirname, "..", "build")));
-app.use(express.static("public"));
+    // The A1 notation of the values to update.
+    range: 'my-range',  // TODO: Update placeholder value.
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+    // How the input data should be interpreted.
+    valueInputOption: '',  // TODO: Update placeholder value.
 
-  // If modifying these scopes, delete token.json.
+    resource: {
+      // TODO: Add desired properties to the request body. All existing properties
+      // will be replaced.
+    },
+
+    auth: authClient,
+  };
+
+  try {
+    const response = (await sheets.spreadsheets.values.update(request)).data;
+    // TODO: Change code below to process the `response` object:
+    console.log(JSON.stringify(response, null, 2));
+  } catch (err) {
+    console.error(err);
+  }
+}
+main();
+
+async function authorize() {
+  // TODO: Change placeholder below to generate authentication credentials. See
+  // https://developers.google.com/sheets/quickstart/nodejs#step_3_set_up_the_sample
+  //
+  // Authorize using one of the following scopes:
+  //   'https://www.googleapis.com/auth/drive'
+  //   'https://www.googleapis.com/auth/drive.file'
+  //   'https://www.googleapis.com/auth/spreadsheets'
+  let authClient = null;
+
   const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
   // The file token.json stores the user's access and refresh tokens, and is
   // created automatically when the authorization flow completes for the first
@@ -84,56 +111,10 @@ app.get("/", (req, res) => {
     });
   }
 
-  /**
-   * Prints the names and majors of students in a sample spreadsheet:
-   * @see https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-   * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
-   */
-  function listMajors(auth) {
-    const sheets = google.sheets({ version: "v4", auth });
 
-    console.log('errklsdjflk');
-
-    const resource = {
-      properties: {
-        title,
-      },
-    };
-    sheets.spreadsheets.create({
-      resource,
-      fields: 'spreadsheetId',
-    }, (err, spreadsheet) =>{
-      if (err) {
-        // Handle error.
-        console.log(err);
-      } else {
-        console.log(`Spreadsheet ID: ${spreadsheet.spreadsheetId}`);
-      }
-    });
-
-    // sheets.spreadsheets.values.get(
-    //   {
-    //     spreadsheetId: "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms",
-    //     range: "Class Data!A2:E"
-    //   },
-    //   (err, res) => {
-    //     if (err) return console.log("The API returned an error: " + err);
-    //     const rows = res.data.values;
-    //     if (rows.length) {
-    //       console.log("Name, Major:");
-    //       // Print columns A and E, which correspond to indices 0 and 4.
-    //       rows.map(row => {
-    //         console.log(`${row[0]}, ${row[4]}`);
-    //       });
-    //     } else {
-    //       console.log("No data found.");
-    //     }
-    //   }
-    // );
+  if (authClient == null) {
+    throw Error('authentication failed');
   }
-});
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Listening on port`, PORT);
-});
+  return authClient;
+}
